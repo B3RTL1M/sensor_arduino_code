@@ -10,6 +10,9 @@ of the disfonctionning or destruction of some software or hardware.
 #ifndef	MPU6050_h
 #define MPU6050_h
 
+#include <Wire.h>
+#include "Arduino.h"
+
 // register map
 #define MPU6050_R_SELF_TEST_X 0x0D
 #define MPU6050_R_SELF_TEST_Y 0x0E
@@ -94,11 +97,35 @@ of the disfonctionning or destruction of some software or hardware.
 #define MPU6050_R_FIFO_R_W 0x74
 #define MPU6050_R_WHO_AM_I 0x75
 
+#define MPU6050_ADDR 0b1101000
+
+typedef struct VectData VectData;
+struct VectData
+{
+  double X;
+  double Y;
+  double Z;
+};
+
+typedef struct SpaceData;
+struct SpaceData
+{
+  VectData Acc;
+  VectData Gyr;
+  double Tmp;
+};
+
 class MPU6050 {
 	
 	public:
+    MPU6050();
+    byte readRegister(byte reg);
+    void writeRegister(byte reg, byte val);
+    SpaceData getSpaceData();
 	
 	private:
+    double AccRes;
+    double GyrRes;
 	
 };
 #endif
